@@ -23,6 +23,7 @@ const createGroup = (req, res, next) => {
 
 // GET for getting the balance of a group
 const getBalance = (req, res, next) => {
+  const release = res.store["lockRelease"];
   try {
     const groupId = req.params.groupId;
 
@@ -37,6 +38,8 @@ const getBalance = (req, res, next) => {
     res.status(StatusCodes.OK).json(balance);
   } catch (error) {
     next(error);
+  } finally {
+    release();
   }
 };
 
