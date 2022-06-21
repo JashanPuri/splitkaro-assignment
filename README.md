@@ -24,7 +24,7 @@ Internship assignment for Splitkaro
 
 ### Steps to run postman collection
 
-Attached is a postman collection for above mentioned points.
+Attached is a postman collection for above mentioned points - Splitkaro-Assignment.postman_collection.json
 
 Import the collection to postman.
 
