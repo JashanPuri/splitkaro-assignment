@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 
 const groupDb = require("../models/group-database");
+const CustomAPIError = require("../models/custom-api-error");
 
 const createGroup = (req, res, next) => {
   try {
@@ -20,7 +21,21 @@ const createGroup = (req, res, next) => {
 };
 
 const getBalance = (req, res, next) => {
-  console.log("Get balance");
+  try {
+    const groupId = req.params.groupId;
+
+    const group = groupDb.getGroupById(groupId);
+
+    if (!group) {
+      throw new CustomAPIError("Group not found", StatusCodes.NOT_FOUND);
+    }
+
+    const balance = group.getBalance();
+
+    res.status(StatusCodes.OK).json(balance);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = { createGroup, getBalance };

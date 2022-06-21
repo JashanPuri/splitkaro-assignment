@@ -87,5 +87,119 @@ module.exports = class Group {
     this.expenses = this.expenses.filter((expense) => expense.id != expenseId);
   }
 
-  getBalance() {}
+  #getMin(map) {
+    var minMemb;
+    var minBal = 0;
+
+    for (var membr in map) {
+      if (!minMemb) {
+        minMemb = membr;
+        minBal = map[membr];
+      }
+
+      if (map[membr] <= minBal) {
+        minBal = map[membr];
+        minMemb = membr;
+      }
+    }
+
+    return { minMember: minMemb, minBalance: minBal };
+  }
+
+  #getMax(map) {
+    var maxMemb;
+    var maxBal;
+
+    for (var membr in map) {
+      if (!maxMemb) {
+        maxMemb = membr;
+        maxBal = map[membr];
+      }
+
+      if (map[membr] >= maxBal) {
+        maxBal = map[membr];
+        maxMemb = membr;
+      }
+    }
+
+    return { maxMember: maxMemb, maxBalance: maxBal };
+  }
+
+  #calCashFlow(memberBalance, balance) {
+    // calculating the maximum balance
+    var { maxMember, maxBalance } = this.#getMax(memberBalance);
+
+    // calculating the minimum balance
+    var { minMember, minBalance } = this.#getMin(memberBalance);
+
+    // base condition for our recusion
+    if (maxBalance === 0 && minBalance === 0) return;
+
+    // Finding the minimum of the two balances
+    // because the minimum will be paid by the minMember to the maxMember
+    var balanceToBePaid = 0;
+    if (Math.abs(minBalance) < Math.abs(maxBalance)) {
+      balanceToBePaid = Math.abs(minBalance);
+    } else {
+      balanceToBePaid = Math.abs(maxBalance);
+    }
+
+    // minMember as to pay maxMember balanceToBePaid
+    memberBalance[maxMember] -= balanceToBePaid;
+    memberBalance[minMember] += balanceToBePaid;
+
+    const owed_by = {};
+    const owes_to = {};
+
+    // maxMember is owed money by minMember
+    owed_by[minMember] = balanceToBePaid;
+    balance[maxMember]["owed_by"].push(owed_by);
+
+    // minMember owes money to maxMember
+    owes_to[maxMember] = balanceToBePaid;
+    balance[minMember]["owes_to"].push(owes_to);
+
+    this.#calCashFlow(memberBalance, balance);
+  }
+
+  // function to calculate the balance for each member of the group
+  getBalance() {
+    const balance = {};
+    const memberArray = Array.from(this.members);
+
+    const memberBalance = {};
+
+    // Calculating the total net balance from all the expenses
+    // paid_by means that the member is owed money
+    // owed_by means that the member has to pay the money
+
+    for (var i = 0; i < memberArray.length; i++) {
+      balance[memberArray[i]] = { total_balance: 0, owes_to: [], owed_by: [] };
+      memberBalance[memberArray[i]] = 0;
+    }
+
+    this.expenses.forEach((expense) => {
+      expense.items.forEach((item) => {
+        item.paid_by.forEach((map) => {
+          for (var membr in map) {
+            balance[membr]["total_balance"] += map[membr];
+            memberBalance[membr] += map[membr];
+          }
+        });
+
+        item.owed_by.forEach((map) => {
+          for (var membr in map) {
+            balance[membr]["total_balance"] -= map[membr];
+            memberBalance[membr] -= map[membr];
+          }
+        });
+      });
+    });
+
+    // this function will calculate who owes how much money
+    // follows the algorithm of minimizing the cash flow
+    this.#calCashFlow(memberBalance, balance);
+
+    return { name: this.name, balances: balance };
+  }
 };
