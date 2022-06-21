@@ -1,0 +1,28 @@
+{
+  "name": "splitkaro-assignment",
+  "version": "1.0.0",
+  "description": "Assignment for Splitkaro Internship",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JashanPuri/splitkaro-assignment.git"
+  },
+  "author": "Jashan Puri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JashanPuri/splitkaro-assignment/issues"
+  },
+  "homepage": "https://github.com/JashanPuri/splitkaro-assignment#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "http-status-codes": "^2.2.0",
+    "nodemon": "^2.0.16",
+    "uuid": "^8.3.2"
+  }
+}
