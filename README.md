@@ -20,3 +20,17 @@ Internship assignment for Splitkaro
 4. DELETE http://localhost:3000/api/v1/groups/{groupId}/expense/{expenseId} - Deletes expense with expenseId of group with groupId
 
 5. GET http://localhost:3000/api/v1/groups/{groupId}/balance - Gets the balance of the group
+
+
+### Steps to run postman collection
+
+Attached is a postman collection for above mentioned points.
+
+Import the collection to postman.
+
+Set the following environment variables:
+1. URL - localhost:localhost:3000/api/v1
+2. groupId - null
+3. expenseId1 - null
+
+Run the collection

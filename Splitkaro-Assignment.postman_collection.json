@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "112d0dea-5596-44a0-989d-303ddde41195",
+		"name": "Splitkaro-Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14485037"
+	},
+	"item": [
+		{
+			"name": "Create group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json()\r",
+							"\r",
+							"pm.environment.set('groupId', response.group.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test1\",\r\n    \"members\": [\"A\", \"B\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/groups",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add expense in group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json()\r",
+							"\r",
+							"pm.environment.set('expenseId1', response.expense.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Expense 1\",\r\n    \"items\": [\r\n        {\r\n            \"name\": \"milk\",\r\n            \"value\": 50,\r\n            \"paid_by\": [\r\n                {\r\n                    \"A\": 40,\r\n                    \"B\": 10\r\n                }\r\n            ],\r\n            \"owed_by\": [\r\n                {\r\n                    \"A\": 20,\r\n                    \"B\": 20,\r\n                    \"C\": 10\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"name\": \"fruits\",\r\n            \"value\": 50,\r\n            \"paid_by\": [\r\n                {\r\n                    \"A\": 50\r\n                }\r\n            ],\r\n            \"owed_by\": [\r\n                {\r\n                    \"A\": 10,\r\n                    \"B\": 30,\r\n                    \"C\": 10\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/groups/{{groupId}}/expense",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"groups",
+						"{{groupId}}",
+						"expense"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get balance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/groups/{{groupId}}/balance",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"groups",
+						"{{groupId}}",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update expense",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Fruits and Milk\",\r\n    \"items\": [\r\n        {\r\n            \"name\": \"milk\",\r\n            \"value\": 100,\r\n            \"paid_by\": [\r\n                {\r\n                    \"A\": 80,\r\n                    \"B\": 20\r\n                }\r\n            ],\r\n            \"owed_by\": [\r\n                {\r\n                    \"A\": 30,\r\n                    \"B\": 30,\r\n                    \"C\": 40\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"name\": \"fruits\",\r\n            \"value\": 50,\r\n            \"paid_by\": [\r\n                {\r\n                    \"A\": 50\r\n                }\r\n            ],\r\n            \"owed_by\": [\r\n                {\r\n                    \"A\": 10,\r\n                    \"B\": 30,\r\n                    \"C\": 10\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/groups/{{groupId}}/expense/{{expenseId1}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"groups",
+						"{{groupId}}",
+						"expense",
+						"{{expenseId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get balance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/groups/{{groupId}}/balance",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"groups",
+						"{{groupId}}",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete expense in group",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/groups/{{groupId}}/expense/{{expenseId1}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"groups",
+						"{{groupId}}",
+						"expense",
+						"{{expenseId1}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
