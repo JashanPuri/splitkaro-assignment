@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const groupDb = require("../models/group-database");
 const CustomAPIError = require("../models/custom-api-error");
 
+// POST for creating a group
 const createGroup = (req, res, next) => {
   try {
     const name = req.body.name;
@@ -20,6 +21,7 @@ const createGroup = (req, res, next) => {
   }
 };
 
+// GET for getting the balance of a group
 const getBalance = (req, res, next) => {
   try {
     const groupId = req.params.groupId;

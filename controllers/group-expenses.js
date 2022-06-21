@@ -1,7 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
+
 const CustomAPIError = require("../models/custom-api-error");
 const groupDb = require("../models/group-database");
+const expenseUpdateMutex = require("../locks/expense-update.js");
 
+// POST for creating expense in group
 const addExpenseInGroup = (req, res, next) => {
   try {
     const groupId = req.params.groupId;
@@ -27,7 +30,8 @@ const addExpenseInGroup = (req, res, next) => {
   }
 };
 
-const updateExpenseInGroup = (req, res, next) => {
+// PATCH for updateing expense in group
+const updateExpenseInGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const expenseId = req.params.expenseId;
 
@@ -40,6 +44,8 @@ const updateExpenseInGroup = (req, res, next) => {
     throw new CustomAPIError("Group not found", StatusCodes.NOT_FOUND);
   }
 
+  console.log(expenseUpdateMutex.isLocked());
+
   const expense = group.updateExpense(expenseId, name, items);
 
   res.status(StatusCodes.OK).json({
@@ -48,6 +54,7 @@ const updateExpenseInGroup = (req, res, next) => {
   });
 };
 
+// DELETE for deleting expense in group
 const deleteExpenseInGroup = (req, res, next) => {
   const groupId = req.params.groupId;
   const expenseId = req.params.expenseId;

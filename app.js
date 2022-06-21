@@ -8,6 +8,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const app = express();
 
+// json parsing
 app.use(express.json());
 
 app.get("/", (req, res, next) => {
@@ -16,7 +17,10 @@ app.get("/", (req, res, next) => {
 
 app.use("/api/v1/groups", groupRoutes);
 
+// handles routes that are not found
 app.use(notFoundMiddleware);
+
+// error handling middleware
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
@@ -31,4 +35,5 @@ const start = () => {
   }
 };
 
+// starts the server
 start();

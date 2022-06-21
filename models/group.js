@@ -7,18 +7,22 @@ module.exports = class Group {
   constructor(name, members = null, expenses = null) {
     this.id = uuidv4();
     this.name = name;
-    this.members = members !== null ? members : new Set();
-    this.expenses = expenses !== null ? expenses : [];
+    this.members = members !== null ? members : new Set(); // Set of members;
+    this.expenses = expenses !== null ? expenses : []; // List of Expense;
   }
 
+  // adds the member to the set of members of the group
   addMember(member) {
     this.members.add(member);
   }
 
+  // check if the person is the member of the group
   isMember(member) {
     return this.members.has(member);
   }
 
+  // checks for consistency of the expense items
+  // also adds people part of the expense but not a member of the group already
   addMembersFromItems(items) {
     items.forEach((item) => {
       item.paid_by.forEach((element) => {
@@ -56,15 +60,18 @@ module.exports = class Group {
   }
 
   addExpense(name, items) {
+    // add members not in group already
     this.addMembersFromItems(items);
 
     const expense = new Expense(name, items);
 
+    // add new expenses to the group
     this.expenses.push(expense);
 
     return expense;
   }
 
+  // updates the expenses
   updateExpense(expenseId, name, items) {
     const expenses = this.expenses.filter((expense) => expense.id == expenseId);
 
@@ -83,10 +90,13 @@ module.exports = class Group {
     return expense;
   }
 
+  // delete the expense with the given expenseId
   deleteExpense(expenseId) {
     this.expenses = this.expenses.filter((expense) => expense.id != expenseId);
   }
 
+  // utility function for calculating cash flow
+  // gives the minimum balance and the member having it
   #getMin(map) {
     var minMemb;
     var minBal = 0;
@@ -106,6 +116,8 @@ module.exports = class Group {
     return { minMember: minMemb, minBalance: minBal };
   }
 
+  // utility function for calculating cash flow
+  // gives the maximum balance and the member having it
   #getMax(map) {
     var maxMemb;
     var maxBal;
@@ -125,6 +137,8 @@ module.exports = class Group {
     return { maxMember: maxMemb, maxBalance: maxBal };
   }
 
+  // caclucates the cash flow
+  // calculates who owes how much
   #calCashFlow(memberBalance, balance) {
     // calculating the maximum balance
     var { maxMember, maxBalance } = this.#getMax(memberBalance);
